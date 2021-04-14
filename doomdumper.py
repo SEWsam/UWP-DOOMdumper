@@ -30,7 +30,7 @@ from json import JSONDecodeError
 import psutil
 from colorama import init
 
-_updated = '2021-04-10'
+_updated = '2021-04-14'
 _game_version = '1.0.5.0'
 
 init(autoreset=True)
@@ -79,23 +79,23 @@ def check_dumpable():
         game_json = json.loads(out)
     except JSONDecodeError:
         print("[31mCouldn't check DOOM Eternal installation status. Is it not installed?")
-        return False
+        return False, None
 
     if game_json['Status'] != 0:
         print("[31mAn update is in progress for DOOM Eternal. Please update it first.")
-        return False
+        return False, None
 
     if game_json['Version'] != _game_version:
         print("[31mThe installed version of DOOM Eternal is not compatible with this version of DOOMdumper"
               " + EternalModInjector")
-        return False
+        return False, None
 
     if game_json['SignatureKind'] == 0:  # A SignatureKind of 0 means the game is sideloaded using developer mode.
-        print("Game is already 'moddable'. Nothing needs to be done.")
-        return False
+        print("Game is already 'moddable'. The game does NOT need to be dumped.")
+        return False, game_json['InstallLocation']
     else:
         print("Game is not 'moddable' yet. Proceeding.")
-        return True
+        return True, None
 
 
 def get_pid():
@@ -125,7 +125,6 @@ def check_path(path):
     if ' ' in path:
         print("[33mPlease enter a path with NO spaces")
         return path, False, None
-
 
     drive_letter = os.path.splitdrive(path)[0]
 
@@ -203,8 +202,8 @@ def check_aborted():
 
 def extract_modinjector(dst):
     with zipfile.ZipFile('EternalModInjector-UWP.zip', 'r') as f:
-        f.extractall(dst)
         print(f"Extracting EternalModInjector-UWP to '{dst}'")
+        f.extractall(dst)
 
 
 def register(path):
@@ -276,7 +275,8 @@ def welcome():
 
 
 def main():
-    if check_dumpable():
+    dumpable, current_path = check_dumpable()
+    if dumpable:
         aborted_path = check_aborted()
         if aborted_path is None:
             while True:
@@ -307,6 +307,10 @@ def main():
         os.system('start ms-windows-store://pdp/?productId=9NB788JLSR97')  # p2 <- <- back twice
         os.system('start ms-windows-store://pdp/?productId=9P2MSCGJPKJC')  # pt1 <- back once
         os.system('start ms-windows-store://pdp/?productId=9PC4V8W0VCWT')  # campaign
+    else:
+        if current_path is not None:
+            print("Your game is already moddable; the included version of EternalModInjector is being extracted")
+            extract_modinjector(current_path)
 
 
 if __name__ == '__main__':
