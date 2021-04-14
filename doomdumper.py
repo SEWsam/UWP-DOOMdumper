@@ -312,6 +312,8 @@ def main():
             print("Your game is already moddable; the included version of EternalModInjector is being extracted")
             extract_modinjector(current_path)
 
+    print(f"\n[32mAll tasks complete!")
+
 
 if __name__ == '__main__':
     try:
