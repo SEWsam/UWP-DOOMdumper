@@ -30,7 +30,7 @@ from json import JSONDecodeError
 import psutil
 from colorama import init
 
-_updated = '2021-04-14'
+_updated = '2021-04-21'
 _game_version = '1.0.5.0'
 
 init(autoreset=True)
