@@ -47,7 +47,7 @@ def size_converter(bytesize):
         value = value / 1024
         unit += 1
 
-    return round(value, 2), units[unit]
+    return str(round(value, 2)) + units[unit]
 
 
 def confirm(prompt):
@@ -152,15 +152,14 @@ def check_path(path):
             return path, False, None
 
     free_bytes = psutil.disk_usage(drive_letter).free
-    free, unit = size_converter(free_bytes)
-    disallowed = ('Bytes', 'KB', 'MB')
-    if free > 75.00 and unit not in disallowed:
+    free_readable = size_converter(free_bytes)
+    if free_bytes > 80530636800:
         valid = True
     else:
-        print(f"[33mNot enough space in '{path}'({free} free, 75GB required)")
+        print(f"[33mNot enough space in '{path}'({free_readable} free, 75GB required)")
         valid = False
 
-    return path, valid, str(free) + unit
+    return path, valid, free_readable
 
 
 def dump(pid, path):
@@ -261,7 +260,7 @@ def welcome():
           "from the original location. You'll need [31m75GB[33m free for this.\n"
 
           )
-    input("Press enter to see update warning.")
+    input("Press enter to see update warning . . .")
     print()
 
     print('[33m' +
