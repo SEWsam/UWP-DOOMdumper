@@ -116,3 +116,4 @@ dmypy.json
 UWPDumper.dll
 UWPInjector.exe
 EternalModInjector-UWP.zip
+/pyinstaller/
