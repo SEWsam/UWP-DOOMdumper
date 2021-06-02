@@ -1,5 +1,12 @@
-# UWP-DOOMdumper
+## UWP-DOOMdumper
+# I'M NO LONGER UPDATING THIS. GO TO [DOOMdumper](https://github.com/SEWsam/DOOMdumper)  
+<br><br><br><br>
+   
+   
 
+
+
+---
 Allows modding game files in the UWP/Game Pass version of DOOM Eternal.  
 
 This is an automated tool that allows the user to choose a new installation directory to sideload DOOM Eternal from.
